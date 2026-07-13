@@ -8,6 +8,7 @@ interface JWTClaims {
   email?: string;
   role?: string;
   tenant_id?: string; // Custom claim added by backend hook
+  app_metadata?: { tenant_id?: string };
   exp?: number;
   iat?: number;
   [key: string]: any;
@@ -53,7 +54,7 @@ export function extractTenantFromSession(session: any): string | null {
 
   try {
     const claims = decodeJWTPayload(session.access_token);
-    const tenantId = claims?.tenant_id;
+    const tenantId = claims?.tenant_id || claims?.app_metadata?.tenant_id;
     
     if (tenantId) {
       if (import.meta.env.DEV) {

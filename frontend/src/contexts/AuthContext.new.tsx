@@ -68,6 +68,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       source = 'user_metadata';
     }
 
+    // Local authentication may return tenant_id directly on the user.
+    if (!tenant_id && enhancedUser.tenant_id) {
+      tenant_id = enhancedUser.tenant_id;
+      source = 'user';
+    }
+
     // Add tenant_id as a direct property for backward compatibility
     enhancedUser.tenant_id = tenant_id;
 
@@ -103,6 +109,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     else if (enhancedUser.user_metadata?.tenant_id) {
       tenant_id = enhancedUser.user_metadata.tenant_id;
       source = 'user_metadata';
+    }
+    else if (enhancedUser.tenant_id) {
+      tenant_id = enhancedUser.tenant_id;
+      source = 'user';
     }
 
     // Add tenant_id as a direct property for backward compatibility
